@@ -1,0 +1,17 @@
+.topBox{
+  background:lightgreen;
+  width:200px;
+  height:50px;
+  border:solid green;
+  border-top:double green;
+  border-bottom:dotted green;
+}
+
+.bottomBox{
+  background:lightgreen;
+  width:150px;
+  height:200px;
+  margin-left:25px;
+  border: solid green;
+  border-top:none;
+}
