@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>HW4</title>
+    <script src="https://d3js.org/d3.v3.js"></script>
+    <style>
+        div{
+            font-size: 7px;
+        }
+    </style>
+</head>
+<body>
+  <svg width="400" height="200">
+      
+  </svg>
+
+  <script>
+       d3.json("invoice-taipei.json", function(dataSet){
+           var svg = d3.select("svg");
+           var count = 0;
+           for(var i=0; i<dataSet.length; i++){
+                if(dataSet[i].cid==='A'&& dataSet[i].amount>1000000000 && dataSet[i].date.substring(0,6)==='2016/8'){
+                      d3.select("svg")
+                        .append("rect")
+                        .attr({
+                        x: 200,
+                        y: 6+15*count,
+                        width: dataSet[i].amount/100000000,
+                        height: 10,
+                        fill: "red"
+                      });
+                      d3.select("svg")
+                        .append("text")
+                        .attr({
+                        x: 0,
+                        y: 16+15*count,
+                        "font-size": 5
+                      }).text(dataSet[i].industry);
+                      count=count+1;
+                 }
+                
+            }
+       });
+       
+       
+        var arr=[85, 60, 99, 49, 77, 82];
+        bind(arr);
+        rendor();
+      
+        function bind(data){
+                var selection = d3.select("body")
+                                  .selectAll("div")
+                                  .data(data);
+                selection.enter().append("div");
+                selection.exit().remove();
+        }
+        function rendor(){
+            d3.selectAll("div")
+              .text(function(d,i){
+                return (i+1) + ":" +d;
+              });
+            d3.selectAll("div").style({
+                color: function(d){
+                    if (d<70){
+                        return "red";
+                    }else{
+                        return "black";
+                    }
+                }
+            });
+        }  
+      
+   </script>
+   
+    <script>
+        
+        var arr=[85, 60, 99, 49, 77, 82];
+        var h=200;
+        var w=400;
+        var p=50;
+        
+        function updateData(){
+            var num= random(20,100);
+            arr.push(num);
+            console.log(arr);
+            bindHist(arr);
+            w=w+50;
+            d3.select("#hist").attr({width:w});
+            rendorHist(h,w,p);
+        };
+        function random(num1, num2){
+            console.log(num1, num2);
+            return Math.floor(Math.random()*(num2-num1)+num1);
+            
+        };
+        function resetData(){
+            arr=[85, 60, 99, 49, 77, 82];
+            w = 400;
+            bindHist(arr);
+            d3.select("#hist").attr({width:w});
+            rendorHist(h,w,p);
+        };
+
+        
+        svg(h, w, p);
+        bindHist(arr);
+        rendorHist(h,w,p);
+        
+        function svg(h, w, p){
+            d3.select("body")
+                .append("svg")
+                .attr({
+                    id: "hist",
+                    width: w,
+                    height: h
+                });
+        }
+        
+        function bindHist(data){
+                var selectionHist = d3.select("#hist")
+                                        .selectAll("rect")
+                                        .data(data);
+                selectionHist.enter().append("rect");
+                selectionHist.exit().remove();
+            
+                var selectionText = d3.select("#hist")
+                                        .selectAll("text")
+                                        .data(data);
+                selectionText.enter().append("text");
+                selectionText.exit().remove();
+        }
+        function rendorHist(h,w,p){
+            d3.select("#hist")
+              .selectAll("rect")
+              .attr({
+                x: function(d,i){
+                    return p+45*i;
+                },
+                y: function(d,i){
+                    return h-p-d;
+                },
+                width: 40,
+                height: function(d){
+                    return d;
+                },
+                fill: function(d){
+                    if(d<70){
+                        return "red";
+                    }else{
+                        return "lightgreen";
+                    }
+                }
+            });
+            
+            d3.select("#hist")
+                .selectAll("text")
+                .attr({
+                    x:function(d,i){
+                        return p+10+45*i;
+                    },
+                    y: h-p+15,
+                    "font-size": 15,
+                    "font-family": "arial"
+                })
+                .text(function(d){return d;}); 
+        }  
+
+    </script>
+    <div>
+        <input type="button" onclick="updateData()" value="新增">
+        <input type="button" onclick="resetData()" value="Reset">
+    </div>
+</body>
+</html>
